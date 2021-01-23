@@ -5,12 +5,18 @@ import java.util.*;
 public class Main {
 	public static void main(String[] args) {
 		String person = User();
-		if (person == "Librarian") {
-			System.out.println("You are a Librarian");
-		} else if (person == "User") {
-			System.out.println("You are a User");
-		} else {
-			System.out.println("Error, please try again");
+		while (true) {
+			if (person.equals("Librarian")) {
+				System.out.println("You are a Librarian");
+				break;
+			} else if (person.equals("User")) {
+				System.out.println("You are a User");
+				break;
+			} else {
+				System.out.println("Error, please try again");
+				person = User();
+			}
+			
 		}
 
 	}
@@ -20,7 +26,6 @@ public class Main {
 		System.out.println("Enter if Librarian or User");
 		Scanner in = new Scanner(System.in);
 		person = in.next();
-		in.close();
 		return person;
 
 	}
