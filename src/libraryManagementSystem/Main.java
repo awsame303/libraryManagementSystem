@@ -3,10 +3,12 @@ package libraryManagementSystem;
 import java.util.*;
 
 public class Main {
-	Librarian librarian = new Librarian();
+	List<Book> books = new ArrayList<Book>();
+	
 	User user = new User();
 
 	public void process() {
+		System.out.println("Enter if Librarian or User");
 		String person = input();
 		while (true) {
 			if (person.equals("Librarian")) {
@@ -33,7 +35,6 @@ public class Main {
 
 	public String input() {
 		String person = "";
-		System.out.println("Enter if Librarian or User");
 		Scanner in = new Scanner(System.in);
 		person = in.next();
 		return person;
@@ -41,26 +42,39 @@ public class Main {
 	}
 
 	public void librarianMethod() {
-		String doing = "";
+		int doing = 0;
 		Scanner in = new Scanner(System.in);
-		System.out.println("What would you like to do: Add New Books, Update availability of a book, Add Count to Book, Track Members, or Track Transitions of Renewals");
-		doing = in.nextLine();
+		System.out.println("What would you like to do: 1, Add New Books: 2, Update availability of a book: 3, Add Count to Book: 4, Track Members: 5, Track Transitions of Renewals: 6, Or Show All Books: 7, or Exit: 8");
+		doing = in.nextInt();
 		switch(doing) {
-		case "Add New Books":
-			System.out.println("HEY");
+		case 1:
+			System.out.println("Enter Book Name: ");
+			Book tempbook = new Book();
+			in = new Scanner(System.in);
+			String tempname = in.nextLine();
+			tempbook.setBookName(tempname);
+			books.add(tempbook);
 			break;
-		case "Update availability of a book":
+		case 2:
 			
-		case "Add Count to Book":
+		case 3:
 			
-		case "Track Members":
+		case 4:
 		
-		case "Track Transitions of Renewals":
+		case 5:
 			
+		case 6:
+			
+		case 7:
+			for(int i = 0; i < books.size(); i++) {
+				System.out.println(books.get(i).getBookName());
+			}
+		
+		case 8:
+			break;
 		default:
 			System.out.println("Error, make sure caps are right and words are spelled correctly");
 			librarianMethod();
-			break;
 		}
 		}
 	
