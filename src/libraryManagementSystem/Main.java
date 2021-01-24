@@ -1,10 +1,10 @@
 package libraryManagementSystem;
 
 import java.util.*;
+import java.sql.*;
 
 public class Main {
 	List<Book> books = new ArrayList<Book>();
-
 	User user = new User();
 
 	public void process() {
@@ -43,9 +43,10 @@ public class Main {
 
 	public void librarianMethod() {
 		int doing = 0;
+		boolean available = false;
 		Scanner in = new Scanner(System.in);
 		System.out.println(
-				"What would you like to do: 1, Add New Books: 2, Update availability of a book: 3, Add Count to Book: 4, Track Members: 5, Track Transitions of Renewals: 6, Or Show All Books: 7, or Exit: 8");
+				"What would you like to do, Add New Books: 1, Update availability of a book: 2, Add Count to Book: 3, Track Members: 4, Track Transitions of Renewals: 5, Or Show All Books: 6, or Exit: 7");
 		doing = in.nextInt();
 		switch (doing) {
 		case 1:
@@ -54,7 +55,14 @@ public class Main {
 			in = new Scanner(System.in);
 			String tempname = in.nextLine();
 			tempbook.setBookName(tempname);
+			System.out.println("Enter the availability of this book: Enter True or False ");
+			available = in.nextBoolean();
+			tempbook.setAvail(available);
+			tempbook.setS1ID();
 			books.add(tempbook);
+			System.out.println("Book created");
+
+			librarianMethod();
 			break;
 		case 2:
 
@@ -65,13 +73,15 @@ public class Main {
 		case 5:
 
 		case 6:
-
-		case 7:
 			for (int i = 0; i < books.size(); i++) {
-				System.out.println(books.get(i).getBookName());
+				System.out.print(books.get(i).getBookName() + ", ");
+				System.out.println(books.get(i).getS1ID() + ", ");
+				System.out.println(books.get(i).getAvail());
 			}
+			librarianMethod();
+			break;
+		case 7:
 
-		case 8:
 			break;
 		default:
 			System.out.println("Error, make sure caps are right and words are spelled correctly");
