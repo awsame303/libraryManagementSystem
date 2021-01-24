@@ -7,7 +7,8 @@ public class Book {
 	String name;
 	boolean avail = true;
 	String theauthor;
-	double S1ID = 0;
+	Random random = new Random();
+	String id;
 
 	public void setBookName(String bookName) {
 		name = bookName;
@@ -38,11 +39,11 @@ public class Book {
 	}
 	
 	public void setS1ID() {
-		S1ID = Math.random() * 1000;
+		id = String.format("%04d", random.nextInt(10000));
 	}
 	
-	public double getS1ID() {
-		return S1ID;
+	public String getS1ID() {
+		return id;
 	}
 }
 	

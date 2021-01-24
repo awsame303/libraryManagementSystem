@@ -55,6 +55,9 @@ public class Main {
 			in = new Scanner(System.in);
 			String tempname = in.nextLine();
 			tempbook.setBookName(tempname);
+			System.out.println("Enter the author of the book: ");
+			String author = in.nextLine();
+			tempbook.setAuthor(author);
 			System.out.println("Enter the availability of this book: Enter True or False ");
 			available = in.nextBoolean();
 			tempbook.setAvail(available);
@@ -75,7 +78,7 @@ public class Main {
 		case 6:
 			for (int i = 0; i < books.size(); i++) {
 				System.out.print(books.get(i).getBookName() + ", ");
-				System.out.println(books.get(i).getS1ID() + ", ");
+				System.out.print(books.get(i).getS1ID() + ", ");
 				System.out.println(books.get(i).getAvail());
 			}
 			librarianMethod();
