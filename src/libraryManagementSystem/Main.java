@@ -50,25 +50,13 @@ public class Main {
 		doing = in.nextInt();
 		switch (doing) {
 		case 1:
-			System.out.println("Enter Book Name: ");
-			Book tempbook = new Book();
-			in = new Scanner(System.in);
-			String tempname = in.nextLine();
-			tempbook.setBookName(tempname);
-			System.out.println("Enter the author of the book: ");
-			String author = in.nextLine();
-			tempbook.setAuthor(author);
-			System.out.println("Enter the availability of this book: Enter True or False ");
-			available = in.nextBoolean();
-			tempbook.setAvail(available);
-			tempbook.setS1ID();
-			books.add(tempbook);
-			System.out.println("Book created");
-
+			createNewBook();
 			librarianMethod();
 			break;
 		case 2:
-
+			setBookAvail();
+			librarianMethod();
+			break;
 		case 3:
 
 		case 4:
@@ -78,6 +66,7 @@ public class Main {
 		case 6:
 			for (int i = 0; i < books.size(); i++) {
 				System.out.print(books.get(i).getBookName() + ", ");
+				System.out.print(books.get(i).getAuthor() + ", ");
 				System.out.print(books.get(i).getS1ID() + ", ");
 				System.out.println(books.get(i).getAvail());
 			}
@@ -94,5 +83,47 @@ public class Main {
 
 	public void userMethod() {
 
+	}
+
+	public void createNewBook() {
+		Scanner in = new Scanner(System.in);
+		boolean available = false;
+
+		System.out.println("Enter Book Name: ");
+		Book tempbook = new Book();
+		in = new Scanner(System.in);
+		String tempname = in.nextLine();
+		tempbook.setBookName(tempname);
+		System.out.println("Enter the author of the book: ");
+		String author = in.nextLine();
+		tempbook.setAuthor(author);
+		System.out.println("Enter the availability of this book: Enter True or False ");
+		available = in.nextBoolean();
+		tempbook.setAvail(available);
+		tempbook.setS1ID();
+		books.add(tempbook);
+		System.out.println("Book created");
+	}
+
+	public void setBookAvail() {
+		Scanner in = new Scanner(System.in);
+		for (int i = 0; i < books.size(); i++) {
+			System.out.println(books.get(i).getBookName() + ", " + books.get(i).getAvail());
+		}
+		System.out.println("Enter the number of the book which you would like to update the availability of: ");
+		// Most people will go from 1+ instead of 0+
+		int numOfBook = in.nextInt() - 1;
+		System.out.println(books.size());
+		System.out.println("You are editing the availability of " + books.get(numOfBook).getBookName());
+		System.out.println("This book is currently set to " + books.get(numOfBook).getAvail()
+				+ " would you like to change this(Y/N)?");
+		String changeAvail = in.next();
+		if (changeAvail == "Y" && books.get(numOfBook).getAvail() == true) {
+			books.get(numOfBook).setAvail(false);
+		} else if (changeAvail == "Y" && books.get(numOfBook).getAvail() == false) {
+			books.get(numOfBook).setAvail(true);
+		} else if (changeAvail == "N") {
+			process();
+		}
 	}
 }
