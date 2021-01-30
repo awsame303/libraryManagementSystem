@@ -9,26 +9,14 @@ public class Book {
 	String theauthor;
 	Random random = new Random();
 	String id;
+	int bookCount;
 
-	public void setBookName(String bookName) {
+	public void setName(String bookName) {
 		name = bookName;
 	}
 
-	public String getBookName() {
+	public String getName() {
 		return name;
-	}
-
-	public void setAvail(boolean available) {
-		avail = available;
-		if (avail == false) {
-			size = size - 1;
-		} else {
-			size = size + 1;
-		}
-	}
-
-	public boolean getAvail() {
-		return avail;
 	}
 
 	public void setAuthor(String author) {
@@ -44,6 +32,14 @@ public class Book {
 	
 	public String getS1ID() {
 		return id;
+	}
+	
+	public void setCount(int count) {
+		bookCount = count;
+	}
+	
+	public int getCount() {
+		return bookCount;
 	}
 }
 	

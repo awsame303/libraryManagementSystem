@@ -5,6 +5,8 @@ import java.sql.*;
 
 public class Main {
 	List<Book> books = new ArrayList<Book>();
+	List<Member> members = new ArrayList<Member>();
+	HashMap<String, String> dates = new HashMap<String, String>();
 	User user = new User();
 
 	public void process() {
@@ -46,7 +48,7 @@ public class Main {
 		boolean available = false;
 		Scanner in = new Scanner(System.in);
 		System.out.println(
-				"What would you like to do, Add New Books: 1, Update availability of a book: 2, Add Count to Book: 3, Track Members: 4, Track Transitions of Renewals: 5, Or Show All Books: 6, or Exit: 7");
+				"What would you like to do, Add New Books: 1, Add/Remove Count to Book: 2, Track Members: 3, Track Transitions of Renewals: 4, Or Show All Books: 5, or Exit: 6");
 		doing = in.nextInt();
 		switch (doing) {
 		case 1:
@@ -58,17 +60,22 @@ public class Main {
 			librarianMethod();
 			break;
 		case 3:
-
+			for (int i = 0; i < members.size(); i++) {
+				System.out.print(members.get(i).getName() + ", ");
+				System.out.print(members.get(i).getHolding() + ", ");
+				System.out.print(members.get(i).getUserID() + ", ");
+				System.out.println(dates.get(members.get(i).getName()));
+			}
 		case 4:
 
 		case 5:
 
 		case 6:
 			for (int i = 0; i < books.size(); i++) {
-				System.out.print(books.get(i).getBookName() + ", ");
+				System.out.print(books.get(i).getName() + ", ");
 				System.out.print(books.get(i).getAuthor() + ", ");
 				System.out.print(books.get(i).getS1ID() + ", ");
-				System.out.println(books.get(i).getAvail());
+				System.out.println(books.get(i).getCount());
 			}
 			librarianMethod();
 			break;
@@ -93,13 +100,13 @@ public class Main {
 		Book tempbook = new Book();
 		in = new Scanner(System.in);
 		String tempname = in.nextLine();
-		tempbook.setBookName(tempname);
+		tempbook.setName(tempname);
 		System.out.println("Enter the author of the book: ");
 		String author = in.nextLine();
 		tempbook.setAuthor(author);
-		System.out.println("Enter the availability of this book: Enter True or False ");
-		available = in.nextBoolean();
-		tempbook.setAvail(available);
+		System.out.println("Enter the amount of books coming into the library: ");
+		int amount = in.nextInt();
+		tempbook.setCount(amount);
 		tempbook.setS1ID();
 		books.add(tempbook);
 		System.out.println("Book created");
@@ -108,22 +115,26 @@ public class Main {
 	public void setBookAvail() {
 		Scanner in = new Scanner(System.in);
 		for (int i = 0; i < books.size(); i++) {
-			System.out.println(books.get(i).getBookName() + ", " + books.get(i).getAvail());
+			System.out.println(books.get(i).getName() + ", " + books.get(i).getCount());
 		}
-		System.out.println("Enter the number of the book which you would like to update the availability of: ");
+		System.out.println("Enter the number of the book which you would like to reduce the count of: ");
 		// Most people will go from 1+ instead of 0+
 		int numOfBook = in.nextInt() - 1;
 		System.out.println(books.size());
-		System.out.println("You are editing the availability of " + books.get(numOfBook).getBookName());
-		System.out.println("This book is currently set to " + books.get(numOfBook).getAvail()
-				+ " would you like to change this(Y/N)?");
-		String changeAvail = in.next();
-		if (changeAvail == "Y" && books.get(numOfBook).getAvail() == true) {
-			books.get(numOfBook).setAvail(false);
-		} else if (changeAvail == "Y" && books.get(numOfBook).getAvail() == false) {
-			books.get(numOfBook).setAvail(true);
-		} else if (changeAvail == "N") {
-			process();
+		System.out.println("You are editing the count of " + books.get(numOfBook).getName());
+		System.out.println("This book is currently has " + books.get(numOfBook).getCount()
+				+ " books, would you like to change this(Y/N)?");
+		switch (in.next()) {
+		case "Y":
+			System.out.println("What would you like to change this to?");
+			books.get(numOfBook).setCount(in.nextInt());
+			System.out.println("Amount changed");
+
+		case "N":
+			System.out.println("Exited");
+			librarianMethod();
+			break;
+
 		}
 	}
 }
