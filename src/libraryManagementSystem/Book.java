@@ -1,8 +1,8 @@
 package libraryManagementSystem;
 
 import java.util.*;
-
 public class Book {
+	List<String> renewals = new ArrayList<String>();
 	int size = 0;
 	String name;
 	boolean avail = true;
@@ -41,5 +41,16 @@ public class Book {
 	public int getCount() {
 		return bookCount;
 	}
+	
+	public void setRenewals(String dateOfHold, String dateOfReturn) {
+		renewals.add(dateOfHold + ", " + dateOfReturn);
+	}
+	
+	public String getRenewals(int num) {
+		return renewals.get(--num);
+	}
+	
+	
+		
 }
 	
