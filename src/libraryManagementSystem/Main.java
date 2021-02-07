@@ -31,7 +31,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		Main runner = new Main();
-		runner.process();
+		// runner.process();
 
 	}
 
@@ -67,10 +67,11 @@ public class Main {
 				System.out.println(dates.get(members.get(i).getName()));
 			}
 		case 4:
+			for (int i = 0; i < members.size(); i++) {
+				System.out.println(members.get(i).getName());
+			}
 
 		case 5:
-
-		case 6:
 			for (int i = 0; i < books.size(); i++) {
 				System.out.print(books.get(i).getName() + ", ");
 				System.out.print(books.get(i).getAuthor() + ", ");
@@ -79,7 +80,7 @@ public class Main {
 			}
 			librarianMethod();
 			break;
-		case 7:
+		case 6:
 
 			break;
 		default:
@@ -89,6 +90,47 @@ public class Main {
 	}
 
 	public void userMethod() {
+		Scanner in = new Scanner(System.in);
+		int choice = 0;
+		System.out.println(
+				"What would you like to do, Take Membership: 1, Update details: 2, Hold return or renew books: 3, Delete Membership: 4, View Book Catalogue: 5, or Exit: 6");
+		choice = in.nextInt();
+		switch (choice) {
+		case 1:
+			
+		case 2:
+
+		case 3:
+
+		case 4:
+			for (int i = 0; i < members.size(); i++) {
+				System.out.println(members.get(i).getName());
+			}
+			System.out.println("Enter the number of the person of which you would like to remove: ");
+			int delchoice = in.nextInt();
+			System.out.println("Are you sure? Enter your full name in the box below to confirm deletion of your account: ");
+			String name = in.nextLine();
+			if (name == members.get(delchoice).getName()) {
+				members.remove(delchoice);
+			} else {
+				System.out.println("Wrong name entered. Quitting...");
+				userMethod();
+				break;
+			}
+		case 5:
+			for (int i = 0; i < books.size(); i++) {
+				System.out.print(books.get(i).getName() + ", ");
+				System.out.print(books.get(i).getAuthor() + ", ");
+				System.out.print(books.get(i).getS1ID() + ", ");
+				System.out.println(books.get(i).getCount());
+			}
+			
+		userMethod();
+		break;
+		case 6:
+			break;
+
+		}
 
 	}
 
@@ -136,5 +178,19 @@ public class Main {
 			break;
 
 		}
+	}
+
+	public void test() {
+		Scanner in = new Scanner(System.in);
+		System.out.println("Enter year(YYYY)");
+		int year = in.nextInt();
+		System.out.println("Enter day(DD)");
+		int day = in.nextInt();
+		System.out.println("Enter Month(Like Feburary as 2 and October as 10)");
+		int month = in.nextInt();
+		System.out.println();
+		members.get(0).setDateOfReturn(year, month - 1, day);
+		;
+
 	}
 }
