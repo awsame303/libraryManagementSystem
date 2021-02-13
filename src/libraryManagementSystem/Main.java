@@ -31,7 +31,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		Main runner = new Main();
-		// runner.process();
+		runner.process();
 
 	}
 
@@ -48,7 +48,7 @@ public class Main {
 		boolean available = false;
 		Scanner in = new Scanner(System.in);
 		System.out.println(
-				"What would you like to do, Add New Books: 1, Add/Remove Count to Book: 2, Track Members: 3, Track Transitions of Renewals: 4, Or Show All Books: 5, or Exit: 6");
+				"What would you like to do, Add New Books: 1, Add/Remove Count to Book: 2, Track Members: 3, Track Transitions of Renewals: 4, Or Show All Books: 5, Exit to Main Men: 6, or Exit: 7");
 		doing = in.nextInt();
 		switch (doing) {
 		case 1:
@@ -81,8 +81,12 @@ public class Main {
 			librarianMethod();
 			break;
 		case 6:
-
+			process();
 			break;
+		
+		case 7:
+			break;
+			
 		default:
 			System.out.println("Error, make sure caps are right and words are spelled correctly");
 			librarianMethod();
@@ -93,10 +97,19 @@ public class Main {
 		Scanner in = new Scanner(System.in);
 		int choice = 0;
 		System.out.println(
-				"What would you like to do, Take Membership: 1, Update details: 2, Hold return or renew books: 3, Delete Membership: 4, View Book Catalogue: 5, or Exit: 6");
+				"What would you like to do, Take Membership: 1, Update details: 2, Hold return or renew books: 3, Delete Membership: 4, View Book Catalogue: 5, Exit to Main Menu: 6, or Exit: 7");
 		choice = in.nextInt();
 		switch (choice) {
 		case 1:
+			Member tempmemb = new Member();
+			System.out.println("Enter your full name: ");
+			String nameOfMember = in.nextLine();
+			tempmemb.setName(nameOfMember);
+			tempmemb.setUserID();
+			tempmemb.setHolding(false);
+			members.add(tempmemb);
+			userMethod();
+			break;
 			
 		case 2:
 
@@ -117,7 +130,10 @@ public class Main {
 				userMethod();
 				break;
 			}
+			userMethod();
+			break;
 		case 5:
+			System.out.println("All books in catalougue");
 			for (int i = 0; i < books.size(); i++) {
 				System.out.print(books.get(i).getName() + ", ");
 				System.out.print(books.get(i).getAuthor() + ", ");
@@ -128,7 +144,14 @@ public class Main {
 		userMethod();
 		break;
 		case 6:
+			process();
 			break;
+		case 7: 
+			break;
+		default:
+			System.out.println("Error, make sure caps are right and words are spelled correctly");
+			userMethod();
+		
 
 		}
 
