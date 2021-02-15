@@ -1,12 +1,13 @@
 package libraryManagementSystem;
 
 import java.util.*;
-import java.text.SimpleDateFormat;
 
 public class Member {
 	boolean isHolding;
 	Random random = new Random();
-	String bookName, userID, userName;
+	String bookName, userID, userName, userPhoneNumber;
+	int userAge;
+	long daysBetween;
 
 	public void setHolding(boolean holding) {
 		isHolding = holding;
@@ -31,18 +32,33 @@ public class Member {
 	public String getName() {
 		return bookName;
 	}
+	
+	public void setPhoneNumber(String phoneNumber) {
+		userPhoneNumber = phoneNumber;
+	}
+	
+	public String getPhoneNumber() {
+		return userPhoneNumber;
+	}
+	
+	public void setAge(int age) {
+		userAge = age;
+	}
+	
+	public int getAge() {
+		return userAge;
+	}
+	
 
 	public void setDateOfReturn(int year, int month, int day) {
 		Date today = new Date();
 		Calendar myNextCalendar = Calendar.getInstance();
 		myNextCalendar.set(year, month, day);
-		Date due = myNextCalendar.getTime();
-
+		Date due = myNextCalendar.getTime();	
 		Member obj = new Member();
 		long days = obj.daysBetween(today, due);
-		SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, YYYY");
-		String todaysDate = sdf.format(today);
-		String dueDate = sdf.format(due);
+		daysBetween = days;
+		
 	}
 
 	public long daysBetween(Date one, Date two) {
@@ -50,4 +66,7 @@ public class Member {
 		return Math.abs(difference);
 	}
 
+	public long getDateOfReturn() {
+		return daysBetween;
+	}
 }

@@ -1,7 +1,6 @@
 package libraryManagementSystem;
 
 import java.util.*;
-import java.sql.*;
 
 public class Main {
 	List<Book> books = new ArrayList<Book>();
@@ -35,6 +34,7 @@ public class Main {
 
 	}
 
+	@SuppressWarnings("resource")
 	public String input() {
 		String person = "";
 		Scanner in = new Scanner(System.in);
@@ -43,8 +43,10 @@ public class Main {
 
 	}
 
+	@SuppressWarnings("resource")
 	public void librarianMethod() {
 		int doing = 0;
+		@SuppressWarnings("unused")
 		boolean available = false;
 		Scanner in = new Scanner(System.in);
 		System.out.println(
@@ -68,7 +70,7 @@ public class Main {
 			}
 		case 4:
 			for (int i = 0; i < members.size(); i++) {
-				System.out.println(members.get(i).getName());
+				System.out.println(members.get(i).getDateOfReturn());
 			}
 
 		case 5:
@@ -83,10 +85,10 @@ public class Main {
 		case 6:
 			process();
 			break;
-		
+
 		case 7:
 			break;
-			
+
 		default:
 			System.out.println("Error, make sure caps are right and words are spelled correctly");
 			librarianMethod();
@@ -94,6 +96,7 @@ public class Main {
 	}
 
 	public void userMethod() {
+		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		int choice = 0;
 		System.out.println(
@@ -105,15 +108,71 @@ public class Main {
 			System.out.println("Enter your full name: ");
 			String nameOfMember = in.nextLine();
 			tempmemb.setName(nameOfMember);
+			System.out.println("Enter your phone number: ");
+			String phoneNumber = in.nextLine();
+			tempmemb.setPhoneNumber(phoneNumber);
+			System.out.println("Enter your age: ");
+			int age = in.nextInt();
+			tempmemb.setAge(age);
 			tempmemb.setUserID();
 			tempmemb.setHolding(false);
 			members.add(tempmemb);
 			userMethod();
 			break;
-			
-		case 2:
 
+		case 2:
+			System.out.println("Enter the number of the person you are: ");
+			for (int i = 0; i < members.size(); i++) {
+				members.get(i).getName();
+			}
+			int user = in.nextInt();
+			--user;
+			System.out.println("Just to make sure this is you, what is your age? ");
+			int confirmAge = in.nextInt();
+			if (confirmAge == user) {
+				System.out.println("What would you like to change? Name, Phone Number, or Age");
+				String changeChoice = in.nextLine();
+				switch (changeChoice) {
+				case "Name":
+					System.out.println("What would you like to change your name to? ");
+					String nameSwitch = in.nextLine();
+					members.get(user).setName(nameSwitch);
+					userMethod();
+					break;
+
+				case "Phone Number":
+					System.out.println("What would you like to change your phone number to? ");
+					String numberSwitch = in.nextLine();
+					members.get(user).setPhoneNumber(numberSwitch);
+					userMethod();
+					break;
+				case "Age":
+					System.out.println("What would you like to change your phone number to? ");
+					int ageSwitch = in.nextInt();
+					members.get(user).setAge(ageSwitch);
+					userMethod();
+					break;
+
+				}
+
+			} else {
+				System.out.println("Wrong Age, quitting to menu... ");
+				userMethod();
+				break;
+			}
 		case 3:
+			// TODO Add member selection and finish book holding
+			System.out.println("All books in catalougue");
+			for (int i = 0; i < books.size(); i++) {
+				System.out.print(books.get(i).getName() + ", ");
+				System.out.print(books.get(i).getAuthor() + ", ");
+				System.out.print(books.get(i).getS1ID() + ", ");
+				System.out.println(books.get(i).getCount());
+			}
+			System.out.println("Enter the S1ID of the book you would like to hold: ");
+			for (int i = 0; i < books.size(); i++) {
+				
+			}
 
 		case 4:
 			for (int i = 0; i < members.size(); i++) {
@@ -121,7 +180,9 @@ public class Main {
 			}
 			System.out.println("Enter the number of the person of which you would like to remove: ");
 			int delchoice = in.nextInt();
-			System.out.println("Are you sure? Enter your full name in the box below to confirm deletion of your account: ");
+			--delchoice;
+			System.out.println(
+					"Are you sure? Enter your full name in the box below to confirm deletion of your account: ");
 			String name = in.nextLine();
 			if (name == members.get(delchoice).getName()) {
 				members.remove(delchoice);
@@ -140,25 +201,27 @@ public class Main {
 				System.out.print(books.get(i).getS1ID() + ", ");
 				System.out.println(books.get(i).getCount());
 			}
-			
-		userMethod();
-		break;
+
+			userMethod();
+			break;
 		case 6:
 			process();
 			break;
-		case 7: 
+		case 7:
 			break;
 		default:
 			System.out.println("Error, make sure caps are right and words are spelled correctly");
 			userMethod();
-		
+			break;
 
 		}
 
 	}
 
 	public void createNewBook() {
+		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
+		@SuppressWarnings("unused")
 		boolean available = false;
 
 		System.out.println("Enter Book Name: ");
@@ -178,6 +241,7 @@ public class Main {
 	}
 
 	public void setBookAvail() {
+		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		for (int i = 0; i < books.size(); i++) {
 			System.out.println(books.get(i).getName() + ", " + books.get(i).getCount());
@@ -204,6 +268,7 @@ public class Main {
 	}
 
 	public void test() {
+		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		System.out.println("Enter year(YYYY)");
 		int year = in.nextInt();
@@ -216,4 +281,5 @@ public class Main {
 		;
 
 	}
+
 }
