@@ -10,7 +10,19 @@ public class Book {
 	Random random = new Random();
 	String id;
 	int bookCount;
-
+	
+	public Book() {
+		
+	}
+	
+	public Book(String name, String auth, int count) {
+		super();
+		this.name = name;
+		this.theauthor = auth;		
+		this.bookCount = count;
+		this.setS1ID();
+	}
+	
 	public void setName(String bookName) {
 		name = bookName;
 	}
@@ -42,15 +54,13 @@ public class Book {
 		return bookCount;
 	}
 	
-	public void setRenewals(String dateOfHold, String dateOfReturn) {
-		renewals.add(dateOfHold + ", " + dateOfReturn);
+	
+	public void printDetails() {
+		System.out.print(getName() + ", ");
+		System.out.print(getAuthor() + ", ");
+		System.out.print(getS1ID() + ", ");
+		System.out.println(getCount());
 	}
-	
-	public String getRenewals(int num) {
-		return renewals.get(--num);
-	}
-	
-	
 		
 }
 	
