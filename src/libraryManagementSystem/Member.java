@@ -93,5 +93,9 @@ public class Member {
 		return dateOfDue;
 	}
 	
+	public void setDueDate(Date date) {
+		dateOfDue = date;
+		
+	}
 
 }
