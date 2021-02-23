@@ -1,11 +1,23 @@
 package libraryManagementSystem;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
 	List<Book> books = new ArrayList<Book>();
 	List<Member> members = new ArrayList<Member>();
 	Map<String, String> dates = new HashMap<String, String>();
+	protected final String passw = "PranavIsTheBest";
+	private int tries = 0;
+
+	public static void main(String[] args) {
+		Main runner = new Main();
+		runner.initializeBooks();
+		runner.initializeMembers();
+		runner.process();
+		// runner.test();
+
+	}
 
 	public void process() {
 		System.out.println("Enter if Librarian or User");
@@ -13,7 +25,11 @@ public class Main {
 		while (true) {
 			if (person.equals("Librarian")) {
 				System.out.println("You are a Librarian");
-				librarianMethod();
+				try {
+					password();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				break;
 			} else if (person.equals("User")) {
 				System.out.println("You are a User");
@@ -27,13 +43,27 @@ public class Main {
 		}
 	}
 
-	public static void main(String[] args) {
-		Main runner = new Main();
-		runner.initializeBooks();
-		runner.initializeMembers();
-		runner.process();
-		// runner.test();
-
+	protected void password() throws InterruptedException {
+		Scanner in = null;
+		if (tries <= 5) {
+			in = new Scanner(System.in);
+			System.out.println("Enter password to enter librarian system: ");
+			String pass = in.nextLine();
+			if (pass.equals(passw)) {
+				System.out.println("Entering librarian method");
+				librarianMethod();
+			} else {
+				tries = tries + 1;
+				System.out.println("Incorrect password, you have used " + tries + " out of the 5 tries.");
+				password();
+			}
+			in.close();
+		} else {
+			System.out.println("You have used all of your tries, please wait for your ten minutes to be up.");
+			Thread.sleep(600000);
+			tries = 0;
+			password();
+		}
 	}
 
 	@SuppressWarnings("resource")
@@ -53,40 +83,45 @@ public class Main {
 		Scanner in = new Scanner(System.in);
 		System.out.println(
 				"What would you like to do, Add New Books: 1, Add/Remove Count to Book: 2, Track Members: 3, Track Transitions of Renewals: 4, Or Show All Books: 5, Exit to Main Men: 6, or Exit: 7");
-		doing = in.nextInt();
-		switch (doing) {
-		case 1:
-			createNewBook();
-			librarianMethod();
-			break;
-		case 2:
-			setBookAvail();
-			librarianMethod();
-			break;
-		case 3:
-			trackMembers();
-			librarianMethod();
-			break;
-		case 4:
-			for (int i = 0; i < members.size(); i++) {
-				System.out.println(members.get(i).getDateOfReturn());
+		try {
+			doing = in.nextInt();
+			switch (doing) {
+			case 1:
+				createNewBook();
+				librarianMethod();
+				break;
+			case 2:
+				setBookAvail();
+				librarianMethod();
+				break;
+			case 3:
+				trackMembers();
+				librarianMethod();
+				break;
+			case 4:
+				for (int i = 0; i < members.size(); i++) {
+					System.out.println(members.get(i).getDateOfReturn());
+				}
+
+			case 5:
+				for (int i = 0; i < books.size(); i++) {
+					books.get(i).printDetails();
+				}
+				librarianMethod();
+				break;
+			case 6:
+				process();
+				break;
+
+			case 7:
+				break;
+
+			default:
+				System.out.println("Error, make sure caps are right and words are spelled correctly");
+				librarianMethod();
 			}
-
-		case 5:
-			for (int i = 0; i < books.size(); i++) {
-				books.get(i).printDetails();
-			}
-			librarianMethod();
-			break;
-		case 6:
-			process();
-			break;
-
-		case 7:
-			break;
-
-		default:
-			System.out.println("Error, make sure caps are right and words are spelled correctly");
+		} catch (InputMismatchException d) {
+			System.out.println("Please enter a number");
 			librarianMethod();
 		}
 	}
@@ -97,51 +132,56 @@ public class Main {
 		int best = 0;
 		System.out.println(
 				"What would you like to do, Take Membership: 1, Update details: 2, Hold return or renew books: 3, Delete Membership: 4, View Book Catalogue: 5, Exit to Main Menu: 6, or Exit: 7");
-		best = in.nextInt();
-		Member selMembr = null;
-		if (best > 1 && best <= 4) {
-			System.out.println("What member are you? Enter your user ID or your name: ");
-			in = new Scanner(System.in);
-			String userNameOrID = in.nextLine();
-			selMembr = this.getMemberByNameOrID(userNameOrID);
-		}
-		switch (best) {
-		case 1:
-			createMember();
-			break;
-
-		case 2:
-			updateDetails(selMembr);
-			userMethod();
-			break;
-
-		case 3:
-			updateBookThings(selMembr);
-			userMethod();
-			break;
-
-		case 4:
-			delMember(selMembr);
-			userMethod();
-			break;
-		case 5:
-			System.out.println("All books in catalougue");
-			for (int i = 0; i < books.size(); i++) {
-				books.get(i).printDetails();
+		try {
+			best = in.nextInt();
+			Member selMembr = null;
+			if (best > 1 && best <= 4) {
+				System.out.println("What member are you? Enter your user ID or your name: ");
+				in = new Scanner(System.in);
+				String userNameOrID = in.nextLine();
+				selMembr = this.getMemberByNameOrID(userNameOrID);
 			}
+			switch (best) {
+			case 1:
+				createMember();
+				break;
 
-			userMethod();
-			break;
-		case 6:
-			process();
-			break;
-		case 7:
-			break;
-		default:
-			System.out.println("Error, make sure caps are right and words are spelled correctly");
-			userMethod();
-			break;
+			case 2:
+				updateDetails(selMembr);
+				userMethod();
+				break;
 
+			case 3:
+				updateBookThings(selMembr);
+				userMethod();
+				break;
+
+			case 4:
+				delMember(selMembr);
+				userMethod();
+				break;
+			case 5:
+				System.out.println("All books in catalougue");
+				for (int i = 0; i < books.size(); i++) {
+					books.get(i).printDetails();
+				}
+
+				userMethod();
+				break;
+			case 6:
+				process();
+				break;
+			case 7:
+				break;
+			default:
+				System.out.println("Error, make sure caps are right and words are spelled correctly");
+				userMethod();
+				break;
+
+			}
+		} catch (InputMismatchException d) {
+			System.out.println("Please enter a number");
+			userMethod();
 		}
 
 	}
@@ -169,7 +209,6 @@ public class Main {
 	}
 
 	public void test() {
-
 	}
 
 	private Member getMemberByNameOrID(String nameOrID) {
@@ -331,54 +370,50 @@ public class Main {
 
 	public void updateBookThings(Member selMembr) {
 		Scanner in = new Scanner(System.in);
-		try {
-			if (selMembr != null) {
+		if (selMembr != null) {
 
-				System.out.println("All books in catalougue");
-				for (int i = 0; i < books.size(); i++) {
-					books.get(i).printDetails();
-				}
-				System.out.println("Enter the S1ID of the book: ");
-				String userS1ID = in.next();
-				System.out.println("What would you like to do? Hold: 1, Return: 2, or Renew: 3");
-				int userChoice = in.nextInt();
-				Book selBook = getBookByS1ID(userS1ID);
-				switch (userChoice) {
-				case 1:
-					if (selBook != null && selBook.getCount() > 0) {
-						selMembr.setHolding(true);
-						selMembr.setBookName(selBook.getName());
-						selMembr.setDateOfReturn();
-						System.out.println("Book due on " + selMembr.getDateOfReturn());
-						selBook.setCount(selBook.getCount() - 1);
-					}
-					userMethod();
-					break;
-				case 2:
-					if (selBook != null && selMembr.getBookName() != null) {
-						selBook.setCount(selBook.getCount() + 1);
-						selMembr.setHolding(false);
-						selMembr.setBookName(null);
-						System.out.println("Book returned");
-					} else {
-						System.out.println("You are not currently holding a book");
-					}
-					in.close();
-					break;
-
-				case 3:
-					if (selBook != null && selMembr.getBookName() != null) {
-						selMembr.setDateOfReturn();
-						System.out.println("Book due on " + selMembr.getDateOfReturn());
-					} else {
-						System.out.println("You are not holding a book");
-					}
-					break;
-				}
+			System.out.println("All books in catalougue");
+			for (int i = 0; i < books.size(); i++) {
+				books.get(i).printDetails();
 			}
+			System.out.println("Enter the S1ID of the book: ");
+			String userS1ID = in.next();
+			System.out.println("What would you like to do? Hold: 1, Return: 2, or Renew: 3");
+			int userChoice = in.nextInt();
+			Book selBook = getBookByS1ID(userS1ID);
+			switch (userChoice) {
+			case 1:
+				if (selBook != null && selBook.getCount() > 0) {
+					selMembr.setHolding(true);
+					selMembr.setBookName(selBook.getName());
+					selMembr.setDateOfReturn();
+					System.out.println("Book due on " + selMembr.getDateOfReturn());
+					selBook.setCount(selBook.getCount() - 1);
+				}
+				userMethod();
+				break;
+			case 2:
+				if (selBook != null && selMembr.getBookName() != null) {
+					selBook.setCount(selBook.getCount() + 1);
+					selMembr.setHolding(false);
+					selMembr.setBookName(null);
+					System.out.println("Book returned");
+				} else {
+					System.out.println("You are not currently holding a book");
+				}
+				userMethod();
+				break;
 
-		} finally {
-			in.close();
+			case 3:
+				if (selBook != null && selMembr.getBookName() != null) {
+					selMembr.setDateOfReturn();
+					System.out.println("Book due on " + selMembr.getDateOfReturn());
+				} else {
+					System.out.println("You are not holding a book");
+				}
+				userMethod();
+				break;
+			}
 		}
 	}
 
