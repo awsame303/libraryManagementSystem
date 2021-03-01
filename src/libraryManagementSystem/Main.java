@@ -1,13 +1,15 @@
 package libraryManagementSystem;
 
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 public class Main {
 	List<Book> books = new ArrayList<Book>();
 	List<Member> members = new ArrayList<Member>();
-	Map<String, String> dates = new HashMap<String, String>();
-	protected final String passw = "PranavIsTheBest";
+	protected final String passw = "awesome";
 	private int tries = 0;
 
 	public static void main(String[] args) {
@@ -60,7 +62,7 @@ public class Main {
 			in.close();
 		} else {
 			System.out.println("You have used all of your tries, please wait for your ten minutes to be up.");
-			Thread.sleep(600000);
+			Thread.sleep(10000);
 			tries = 0;
 			password();
 		}
@@ -76,7 +78,7 @@ public class Main {
 	}
 
 	@SuppressWarnings("resource")
-	public void librarianMethod() {
+	public void librarianMethod() throws NoSuchElementException {
 		int doing = 0;
 		@SuppressWarnings("unused")
 		boolean available = false;
@@ -100,8 +102,13 @@ public class Main {
 				break;
 			case 4:
 				for (int i = 0; i < members.size(); i++) {
-					System.out.println(members.get(i).getDateOfReturn());
+					System.out.println();
+					System.out.print(members.get(i).getUserName() + ": ");
+					printCheckedOutBooks(members.get(i));
+
 				}
+				librarianMethod();
+				break;
 
 			case 5:
 				for (int i = 0; i < books.size(); i++) {
@@ -126,16 +133,16 @@ public class Main {
 		}
 	}
 
-	public void userMethod() {
+	public void userMethod() throws NoSuchElementException {
 		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		int best = 0;
 		System.out.println(
-				"What would you like to do, Take Membership: 1, Update details: 2, Hold return or renew books: 3, Delete Membership: 4, View Book Catalogue: 5, Exit to Main Menu: 6, or Exit: 7");
+				"What would you like to do, Take Membership: 1, Update details: 2, Hold return or renew books: 3, Delete Membership: 4, View Book Catalogue: 5, View Due Dates Of Your Books: 6, Exit to Main Menu: 7, or Exit: 8");
 		try {
 			best = in.nextInt();
 			Member selMembr = null;
-			if (best > 1 && best <= 4) {
+			if (best > 1 && best <= 4 || best == 6) {
 				System.out.println("What member are you? Enter your user ID or your name: ");
 				in = new Scanner(System.in);
 				String userNameOrID = in.nextLine();
@@ -143,6 +150,7 @@ public class Main {
 			}
 			switch (best) {
 			case 1:
+
 				createMember();
 				break;
 
@@ -168,10 +176,16 @@ public class Main {
 
 				userMethod();
 				break;
+
 			case 6:
+				printCheckedOutBooks(selMembr);
+				userMethod();
+				break;
+
+			case 7:
 				process();
 				break;
-			case 7:
+			case 8:
 				break;
 			default:
 				System.out.println("Error, make sure caps are right and words are spelled correctly");
@@ -186,7 +200,7 @@ public class Main {
 
 	}
 
-	private void initializeBooks() {
+	private void initializeBooks() {	
 		Book book1 = new Book("Percy Jackson", "Rick Riordan", 4);
 		Book book2 = new Book("Harry Motter", "J. K. Rowling", 4);
 		Book book3 = new Book("Wonder", "R. J. Palacio", 4);
@@ -224,10 +238,10 @@ public class Main {
 		return membr;
 	}
 
-	public Book getBookByS1ID(String userS1ID) {
+	public Book getBookByS1ID(String userS1IDorName) {
 		Book bok = null;
 		for (int i = 0; i < books.size(); i++) {
-			if (books.get(i).getS1ID().equals(userS1ID)) {
+			if (books.get(i).getS1ID().equals(userS1IDorName) || books.get(i).getName().equals(userS1IDorName)) {
 				bok = books.get(i);
 			}
 		}
@@ -236,102 +250,91 @@ public class Main {
 	}
 
 	public void createNewBook() {
+		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
-		try {
-			System.out.println("Enter Book Name: ");
-			Book tempbook = new Book();
-			String tempname = in.nextLine();
-			tempbook.setName(tempname);
-			System.out.println("Enter the author of the book: ");
-			String author = in.nextLine();
-			tempbook.setAuthor(author);
-			System.out.println("Enter the amount of books coming into the library: ");
-			int amount = in.nextInt();
-			tempbook.setCount(amount);
-			tempbook.setS1ID();
-			books.add(tempbook);
-			System.out.println("Book created");
-		} finally {
-			in.close();
-		}
+		System.out.println("Enter Book Name: ");
+		Book tempbook = new Book();
+		String tempname = in.nextLine();
+		tempbook.setName(tempname);
+		System.out.println("Enter the author of the book: ");
+		String author = in.nextLine();
+		tempbook.setAuthor(author);
+		System.out.println("Enter the amount of books coming into the library: ");
+		int amount = in.nextInt();
+		tempbook.setCount(amount);
+		tempbook.setS1ID();
+		books.add(tempbook);
+		System.out.println("Book created");
+
 	}
 
+	@SuppressWarnings("resource")
 	public void setBookAvail() {
 		Scanner in = new Scanner(System.in);
+		System.out.println("Enter the S1ID or name of the book which you would like to add/reduce the count of: ");
+		String Stringors1id = in.nextLine();
+		Book selBook = getBookByS1ID(Stringors1id);
 		try {
-			for (int i = 0; i < books.size(); i++) {
-				System.out.println(books.get(i).getName() + ", " + books.get(i).getCount());
-			}
-			System.out.println("Enter the number of the book which you would like to reduce the count of: ");
-			// Most people will go from 1+ instead of 0+
-			int numOfBook = in.nextInt() - 1;
-			System.out.println(books.size());
-			System.out.println("You are editing the count of " + books.get(numOfBook).getName());
-			System.out.println("This book is currently has " + books.get(numOfBook).getCount()
-					+ " books, would you like to change this(Y/N)?");
-			switch (in.next()) {
-			case "Y":
-				System.out.println("What would you like to change this to?");
-				books.get(numOfBook).setCount(in.nextInt());
-				System.out.println("Amount changed");
 
-			case "N":
-				System.out.println("Exited");
-				librarianMethod();
-				break;
+		System.out.println("You are editing the count of " + selBook.getName());
+		System.out.println(
+				"This book is currently has " + selBook.getCount() + " books, would you like to change this(Y/N)?");
+		switch (in.next()) {
+		case "Y":
+			System.out.println("What would you like to change this to?");
+			selBook.setCount(in.nextInt());
+			System.out.println("Amount changed");
+			break;
 
-			}
-		} finally {
-			in.close();
+		case "N":
+			System.out.println("Exited");
+			break;
+		}
+		} catch(NullPointerException d) {
+			System.out.println("Invalid Name Or S1ID, please try again");
+			setBookAvail();
 		}
 
 	}
 
 	public void trackMembers() {
-		try {
-			for (int i = 0; i < members.size(); i++) {
-				System.out.print(members.get(i).getUserName() + ", ");
-				System.out.print(members.get(i).getHolding() + ", ");
-				System.out.print(members.get(i).getUserID());
-				System.out.println();
-			}
-		} finally {
-
+		for (int i = 0; i < members.size(); i++) {
+			System.out.print(members.get(i).getUserName() + ", ");
+			System.out.print(members.get(i).getHolding() + ", ");
+			System.out.print(members.get(i).getUserID());
+			System.out.println();
 		}
 	}
 
+	@SuppressWarnings("resource")
 	public void createMember() {
 		Member tempmemb = new Member();
 		Scanner in = new Scanner(System.in);
-		try {
-			System.out.println("Enter your full name: ");
-			String nameOfMember = in.nextLine();
-			tempmemb.setUserName(nameOfMember);
-			if (!nameOfMember.isEmpty()) {
 
-				System.out.println("Enter your phone number: ");
-				String phoneNumber = in.nextLine();
-				tempmemb.setPhoneNumber(phoneNumber);
+		System.out.println("Enter your full name: ");
+		String nameOfMember = in.nextLine();
+		tempmemb.setUserName(nameOfMember);
+		if (!nameOfMember.isEmpty()) {
 
-				if (!phoneNumber.isEmpty()) {
-					System.out.println("Enter your age: ");
-					int age = in.nextInt();
-					tempmemb.setAge(age);
-					tempmemb.generateUserID();
-					tempmemb.setHolding(false);
-					members.add(tempmemb);
-					userMethod();
-				}
+			System.out.println("Enter your phone number: ");
+			String phoneNumber = in.nextLine();
+			tempmemb.setPhoneNumber(phoneNumber);
+
+			if (!phoneNumber.isEmpty()) {
+				System.out.println("Enter your age: ");
+				int age = in.nextInt();
+				tempmemb.setAge(age);
+				tempmemb.generateUserID();
+				tempmemb.setHolding(false);
+				members.add(tempmemb);
+				userMethod();
 			}
-		} finally {
-			in.close();
 		}
 	}
 
 	@SuppressWarnings("resource")
 	public void updateDetails(Member selMembr) {
 		Scanner in = new Scanner(System.in);
-		try {
 			if (selMembr != null) {
 				System.out.println("What would you like to change? Name: 1, Phone Number: 2, or Age: 3");
 				int changeChoice = in.nextInt();
@@ -363,12 +366,11 @@ public class Main {
 				}
 
 			}
-		} finally {
-			in.close();
-		}
+
 	}
 
 	public void updateBookThings(Member selMembr) {
+		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		if (selMembr != null) {
 
@@ -385,18 +387,18 @@ public class Main {
 			case 1:
 				if (selBook != null && selBook.getCount() > 0) {
 					selMembr.setHolding(true);
-					selMembr.setBookName(selBook.getName());
+					selMembr.setBooks(selBook.getName());
 					selMembr.setDateOfReturn();
-					System.out.println("Book due on " + selMembr.getDateOfReturn());
+					System.out.println("Book due on " + selMembr.heldBooks.get(selBook.getName()));
 					selBook.setCount(selBook.getCount() - 1);
 				}
 				userMethod();
 				break;
 			case 2:
-				if (selBook != null && selMembr.getBookName() != null) {
+				if (selBook != null && selMembr.getBooks() != null) {
 					selBook.setCount(selBook.getCount() + 1);
 					selMembr.setHolding(false);
-					selMembr.setBookName(null);
+					selMembr.setBooks(null);
 					System.out.println("Book returned");
 				} else {
 					System.out.println("You are not currently holding a book");
@@ -405,9 +407,10 @@ public class Main {
 				break;
 
 			case 3:
-				if (selBook != null && selMembr.getBookName() != null) {
-					selMembr.setDateOfReturn();
-					System.out.println("Book due on " + selMembr.getDateOfReturn());
+				if (selBook != null && selMembr.getBooks() != null) {
+					selMembr.heldBooks.replace(selBook.getName(), selMembr.getDateOfReturn());
+					System.out.print("Book name and Book due date: ");
+					printCheckedOutBooks(selMembr);
 				} else {
 					System.out.println("You are not holding a book");
 				}
@@ -418,25 +421,34 @@ public class Main {
 	}
 
 	public void delMember(Member selMembr) {
+		@SuppressWarnings("resource")
+		Scanner in = new Scanner(System.in);
 		for (int i = 0; i < members.size(); i++) {
-			Scanner in = new Scanner(System.in);
-			try {
-				if (selMembr == members.get(i)) {
 
-					System.out.println(
-							"Are you sure? Enter your full name in the box below to confirm deletion of your account: ");
-					String name = in.nextLine();
-					if (name == selMembr.getBookName()) {
-						members.remove(i);
-					} else {
-						System.out.println("Wrong name entered. Quitting...");
-						userMethod();
-						break;
-					}
+			if (selMembr == members.get(i)) {
+
+				System.out.println(
+						"Are you sure? Enter your full name in the box below to confirm deletion of your account: ");
+				String name = in.nextLine();
+				if (name.equals(selMembr.getUserName())) {
+					members.remove(i);
+					break;
+				} else {
+					System.out.println("Wrong name entered. Quitting...");
+					userMethod();
+					break;
 				}
-			} finally {
-				in.close();
 			}
+		}
+	}
+
+	private void printCheckedOutBooks(Member selMembr) {
+		if (selMembr.heldBooks.size() > 0) {
+			for (Object objectName : selMembr.heldBooks.keySet()) {
+				System.out.println(objectName + ", " + selMembr.heldBooks.get(objectName));
+			}
+		} else {
+			System.out.println(selMembr.getUserName() + " has no books");
 		}
 	}
 }

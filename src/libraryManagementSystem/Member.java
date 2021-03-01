@@ -1,7 +1,7 @@
 package libraryManagementSystem;
 
 import java.util.*;
-//import java.sql.Date;
+
 import java.util.Calendar;
 
 public class Member {
@@ -12,6 +12,7 @@ public class Member {
 	long daysBetween;
 	long millis = System.currentTimeMillis();
 	Date dateOfDue = null;
+	Map<String, java.util.Date> heldBooks = new HashMap<String, java.util.Date>();
 	
 	public Member() {
 		
@@ -52,12 +53,15 @@ public class Member {
 	
 	
 	
-	public void setBookName(String name) {
+	public void setBooks(String name) {
 		bookName = name;
+		setDateOfReturn();
+		heldBooks.put(name, dateOfDue);
 	}
 
-	public String getBookName() {
-		return bookName;
+	public List<Map<String,Date>> getBooks() {
+		System.out.println();
+		return Collections.singletonList(heldBooks);
 	}
 
 	public void setPhoneNumber(String phoneNumber) {
