@@ -1,4 +1,4 @@
-package libraryManagementSystem;
+package com.pt.objects;
 
 import java.util.*;
 
@@ -12,20 +12,19 @@ public class Member {
 	long daysBetween;
 	long millis = System.currentTimeMillis();
 	Date dateOfDue = null;
-	Map<String, java.util.Date> heldBooks = new HashMap<String, java.util.Date>();
-	
+	public Map<String, java.util.Date> heldBooks = new HashMap<String, java.util.Date>();
+
 	public Member() {
-		
+
 	}
-	
+
 	public Member(String name, String phoneNumber, int age) {
 		this.userName = name;
 		this.userPhoneNumber = phoneNumber;
 		this.userAge = age;
 		generateUserID();
 	}
-	
-	
+
 	public void setHolding(boolean holding) {
 		isHolding = holding;
 	}
@@ -42,7 +41,6 @@ public class Member {
 		return userID;
 	}
 
-	
 	public void setUserName(String name) {
 		userName = name;
 	}
@@ -50,16 +48,14 @@ public class Member {
 	public String getUserName() {
 		return userName;
 	}
-	
-	
-	
+
 	public void setBooks(String name) {
 		bookName = name;
 		setDateOfReturn();
 		heldBooks.put(name, dateOfDue);
 	}
 
-	public List<Map<String,Date>> getBooks() {
+	public List<Map<String, Date>> getBooks() {
 		System.out.println();
 		return Collections.singletonList(heldBooks);
 	}
@@ -83,7 +79,7 @@ public class Member {
 	public void setDateOfReturn() {
 		dateOfDue = new Date();
 		int daysDue = 30;
-		dateOfDue = this.addDays(dateOfDue, daysDue);		
+		dateOfDue = this.addDays(dateOfDue, daysDue);
 	}
 
 	public Date addDays(Date date, int days) {
@@ -92,14 +88,24 @@ public class Member {
 		c.add(Calendar.DATE, days);
 		return new Date(c.getTimeInMillis());
 	}
-	
+
 	public Date getDateOfReturn() {
 		return dateOfDue;
 	}
-	
+
 	public void setDueDate(Date date) {
 		dateOfDue = date;
-		
+
+	}
+
+	public void printCheckedOutBooks() {
+		if (heldBooks.size() > 0) {
+			for (Object objectName : heldBooks.keySet()) {
+				System.out.println(objectName + ", " + heldBooks.get(objectName));
+			}
+		} else {
+			System.out.println(getUserName() + " has no books");
+		}
 	}
 
 }
